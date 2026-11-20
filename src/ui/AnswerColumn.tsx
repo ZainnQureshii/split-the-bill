@@ -1,6 +1,7 @@
 import type { UseBill } from '../state'
 import { Avatar } from './Avatar'
 import { Breakdown } from './Breakdown'
+import { fitAmount } from './fitAmount'
 
 type AnswerColumnProps = Pick<
   UseBill,
@@ -29,7 +30,7 @@ export function AnswerColumn({
           <h2 id="total-title">Your bill total</h2>
           <span className="total-status">{empty ? 'Ready when you are' : pending ? 'In progress' : 'Split calculated'}</span>
         </div>
-        {!empty && <p className="hero-amount">{format(result.totalCents)}</p>}
+        {!empty && <p className="hero-amount" {...fitAmount(format(result.totalCents))} />}
         <div className="table-group">
           {bill.people.length > 0 && (
             <div className="avatar-stack" aria-hidden="true">
@@ -41,9 +42,9 @@ export function AnswerColumn({
         </div>
         {!empty && (
           <dl className="total-parts">
-            <div><dt>Items</dt><dd>{format(result.subtotalCents)}</dd></div>
-            <div><dt>Tax</dt><dd>{format(bill.taxCents)}</dd></div>
-            <div><dt>Tip</dt><dd>{format(bill.tipCents)}</dd></div>
+            <div><dt>Items</dt><dd {...fitAmount(format(result.subtotalCents))} /></div>
+            <div><dt>Tax</dt><dd {...fitAmount(format(bill.taxCents))} /></div>
+            <div><dt>Tip</dt><dd {...fitAmount(format(bill.tipCents))} /></div>
           </dl>
         )}
       </section>
@@ -89,7 +90,7 @@ export function AnswerColumn({
                 <li key={i}>
                   <Avatar personId={transfer.from} />
                   <p><strong>{nameOf(transfer.from)}</strong><span> pays {nameOf(transfer.to)}</span></p>
-                  <div className="transfer-amount">{format(transfer.amountCents)}</div>
+                  <div className="transfer-amount" {...fitAmount(format(transfer.amountCents))} />
                 </li>
               ))}
             </ol>

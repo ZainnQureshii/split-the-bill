@@ -626,6 +626,7 @@ main {
 }
 
 .totals {
+  container-type: inline-size;
   padding: 30px;
   border-radius: var(--radius-card);
   background: var(--color-accent);
@@ -654,8 +655,12 @@ main {
   color: var(--color-on-accent);
 }
 
+/* Each amount's length (--amount-chars, set in the markup) caps its size so it fits on one line in the
+   room it has: a large total shrinks instead of breaking in the middle of the number. It can still wrap
+   when the reader forces bigger text (a browser minimum font size), so it never runs off the screen. */
 .hero-amount {
-  font: 500 clamp(52px, 6.5vw, 84px)/1.15 var(--font-display);
+  --amount-size: clamp(52px, 6.5vw, 84px);
+  font: 500 min(var(--amount-size), 100cqi / (var(--amount-chars, 1) * .55))/1.15 var(--font-display);
   letter-spacing: -.06em;
   margin: 25px 0 18px;
   font-variant-numeric: tabular-nums;
@@ -728,6 +733,7 @@ dd {
 }
 
 .total-parts > div {
+  container-type: inline-size;
   display: flex;
   flex-direction: column;
   gap: 7px;
@@ -740,9 +746,10 @@ dd {
 }
 
 .total-parts dd {
+  --amount-size: 19px;
   text-align: left;
   font-family: var(--font-display);
-  font-size: 19px;
+  font-size: min(var(--amount-size), 100cqi / (var(--amount-chars, 1) * .6));
 }
 
 .issues:empty {
@@ -805,6 +812,7 @@ dd {
 }
 
 .transfers li {
+  container-type: inline-size;
   display: flex;
   align-items: center;
   gap: 12px;
@@ -831,10 +839,12 @@ dd {
 }
 
 .transfer-amount {
-  font: 500 30px var(--font-display);
+  --amount-size: 30px;
+  font: 500 min(var(--amount-size), 50cqi / (var(--amount-chars, 1) * .55)) var(--font-display);
   letter-spacing: -.04em;
   font-variant-numeric: tabular-nums;
   overflow-wrap: anywhere;
+  flex-shrink: 0;
   max-width: 50%;
   color: var(--color-accent-hover);
 }
@@ -879,6 +889,7 @@ dd {
 }
 
 .share summary {
+  container-type: inline-size;
   display: flex;
   align-items: center;
   gap: 12px;
@@ -913,11 +924,13 @@ dd {
 }
 
 .share-amount {
-  font: 500 23px var(--font-display);
+  --amount-size: 23px;
+  font: 500 min(var(--amount-size), 45cqi / (var(--amount-chars, 1) * .55)) var(--font-display);
   font-variant-numeric: tabular-nums;
   letter-spacing: -.035em;
   max-width: 45%;
   overflow-wrap: anywhere;
+  flex-shrink: 0;
 }
 
 .disclosure-arrow {
@@ -1105,7 +1118,7 @@ button, .button, input, select, summary {
     padding: 12px;
   }
   .share-amount {
-    font-size: 21px;
+    --amount-size: 21px;
   }
 }
 
@@ -1126,13 +1139,13 @@ button, .button, input, select, summary {
     align-items: center;
   }
   .hero-amount {
-    font-size: 80px;
+    --amount-size: 80px;
   }
   .total-parts dd {
-    font-size: 22px;
+    --amount-size: 22px;
   }
   .share-amount {
-    font-size: 25px;
+    --amount-size: 25px;
   }
 }
 
@@ -1215,7 +1228,7 @@ button, .button, input, select, summary {
     margin-left: 50px;
   }
   .hero-amount {
-    font-size: clamp(48px, 15vw, 76px);
+    --amount-size: clamp(48px, 15vw, 76px);
   }
   .total-heading {
     flex-wrap: wrap;
@@ -1224,10 +1237,10 @@ button, .button, input, select, summary {
     gap: 8px;
   }
   .total-parts dd {
-    font-size: 19px;
+    --amount-size: 19px;
   }
   .transfer-amount {
-    font-size: 27px;
+    --amount-size: 27px;
   }
   .transfers li {
     gap: 10px;
@@ -1245,7 +1258,7 @@ button, .button, input, select, summary {
     height: 34px;
   }
   .share-amount {
-    font-size: 22px;
+    --amount-size: 22px;
   }
   .share-person > span {
     font-size: 10px;

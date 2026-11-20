@@ -238,3 +238,21 @@ describe('clearing the last amount on a bill', () => {
     expect(document.activeElement).toBe(tip)
   })
 })
+
+describe('large amounts', () => {
+  it('gives each headline amount its length, so the style can keep it on one line', () => {
+    seed({
+      ...twoPeopleOneDish,
+      items: [{ id: 'i1', label: 'Pizza', amountCents: 20_000_008_491, sharedBy: ['a', 'b'] }],
+      paidCents: { a: 20_000_008_491 },
+    })
+    const { container } = render(<App />)
+
+    for (const selector of ['.hero-amount', '.total-parts dd', '.share-amount', '.transfer-amount']) {
+      const amount = container.querySelector<HTMLElement>(selector)
+      expect(amount, selector).not.toBeNull()
+      expect(amount!.style.getPropertyValue('--amount-chars'), selector).toBe(String(amount!.textContent!.length))
+    }
+    expect(container.querySelector('.hero-amount')!.textContent).toBe('€200,000,084.91')
+  })
+})
