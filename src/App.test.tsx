@@ -244,15 +244,21 @@ describe('large amounts', () => {
     seed({
       ...twoPeopleOneDish,
       items: [{ id: 'i1', label: 'Pizza', amountCents: 20_000_008_491, sharedBy: ['a', 'b'] }],
-      paidCents: { a: 20_000_008_491 },
+      taxCents: 1_500_000_012,
+      tipCents: 7,
+      paidCents: { a: 21_500_008_510 },
     })
     const { container } = render(<App />)
 
-    for (const selector of ['.hero-amount', '.total-parts dd', '.share-amount', '.transfer-amount']) {
-      const amount = container.querySelector<HTMLElement>(selector)
-      expect(amount, selector).not.toBeNull()
-      expect(amount!.style.getPropertyValue('--amount-chars'), selector).toBe(String(amount!.textContent!.length))
+    // Every amount of each kind: the total, Items/Tax/Tip, both shares and the one payment.
+    const expected = { '.hero-amount': 1, '.total-parts dd': 3, '.share-amount': 2, '.transfer-amount': 1 }
+    for (const [selector, count] of Object.entries(expected)) {
+      const amounts = [...container.querySelectorAll<HTMLElement>(selector)]
+      expect(amounts, selector).toHaveLength(count)
+      for (const amount of amounts) {
+        expect(amount.style.getPropertyValue('--amount-chars'), selector).toBe(String(amount.textContent!.length))
+      }
     }
-    expect(container.querySelector('.hero-amount')!.textContent).toBe('€200,000,084.91')
+    expect(container.querySelector('.hero-amount')!.textContent).toBe('€215,000,085.10')
   })
 })
