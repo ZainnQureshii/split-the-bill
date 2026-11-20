@@ -1,5 +1,6 @@
 import type { UseBill } from '../state'
 import { Avatar } from './Avatar'
+import { fitAmount } from './fitAmount'
 
 type BreakdownProps = Pick<UseBill, 'result' | 'hasErrors' | 'nameOf' | 'format'>
 
@@ -19,7 +20,7 @@ export function Breakdown({ result, hasErrors, nameOf, format }: BreakdownProps)
                 <strong>{nameOf(share.personId)}</strong>
                 <span>{share.netCents > 0 ? 'Gets back' : share.netCents < 0 ? 'Still owes' : 'All square'} {format(Math.abs(share.netCents))}</span>
               </span>
-              <span className="share-amount">{format(share.owedCents)}</span>
+              <span className="share-amount" {...fitAmount(format(share.owedCents))} />
               <span className="disclosure-arrow" aria-hidden="true">⌄</span>
             </summary>
             <dl>
